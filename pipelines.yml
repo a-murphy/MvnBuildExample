@@ -1,0 +1,30 @@
+resources:
+  - name: maven_pipeline_buildInfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: aidan_artifactory
+      buildName: name
+      buildNumber: 0
+  - name: maven_pipeline_repo
+    type: GitRepo
+    configuration:
+      path: a-murphy/project-examples
+      gitProvider: aidan_github
+      branches:
+        include: master
+
+pipelines:
+  - name: maven_pipeline
+    steps:
+      - name: mvnBuild_example
+        type: MvnBuild
+        configuration:
+          sourceLocation: artifactory-maven-plugin-example
+          mvnCommand: "install -P release"
+          inputResources:
+            - name: maven_pipeline_repo
+          outputResources:
+            - name: maven_pipeline_buildInfo
+          integrations:
+            - name: aidan_artifactory
+ 
